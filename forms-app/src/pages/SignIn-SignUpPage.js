@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import * as Components from "../components/signIn-signUp";
 import { signUp, signIn } from "../firebase/firebase";
-import {toast, Toaster} from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom"; // Import useHistory
+import { useAuth } from "../contexts/AuthContext";
+import Loading from "../components/loading";
+
 
 
 
@@ -12,6 +16,9 @@ function SignInSignUp() {
     const [signInValue, setSignIn] = useState(true);
     const [show, setShow] = useState(false);
     const [see, setSee] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const { updateAuthUser } = useAuth();
+    const navigate = useNavigate(); // Use navigate
 
     const toggleShow = () => {
         setShow(!show);
@@ -29,35 +36,43 @@ function SignInSignUp() {
     };
 
     const SignUp = async () => {
+        setLoading(true);
         try {
-          await signUp(email, password, username);
+            const user = await signUp(email, password, username);
+            updateAuthUser(user);
+            setLoading(false);
+            navigate("/home"); // Navigate to the home page
 
         } catch (error) {
             console.error("Erro ao criar conta:", error.message);
+            setLoading(false);
         }
-      };
-      
-      const LogIn = async () => {
+    };
+
+    const LogIn = async () => {
+        setLoading(true);
         try {
-            console.log("LogIn")
-            console.log(email)
-          const user = await signIn(email, password);
+            const user = await signIn(email, password);
+            updateAuthUser(user);
+            setLoading(false);
+            navigate("/home"); // Navigate to the home page
         } catch (error) {
-          console.error("Erro ao fazer login:", error.message);
+            console.error("Erro ao fazer login:", error.message);
+            setLoading(false);
         }
-      };
+    };
 
     return (
         <div style={{ background: "transparent", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", height: "100vh", margin: "-20px 0 50px" }}>
-                    <Toaster></Toaster>
+            <Toaster></Toaster>
 
             <Components.Container>
                 <Components.SignUpContainer signIn={signInValue}>
                     <Components.Form >
                         <Components.Title>Crie uma conta</Components.Title>
-                         <Components.Input type='text' placeholder='Nome' onChange={(e) => setName(e.target.value)} />
+                        <Components.Input type='text' placeholder='Nome' onChange={(e) => setName(e.target.value)} />
                         <Components.Input type='email' placeholder='Email' onChange={(e) => setEmail(e.target.value)} />
-                        <Components.InputPass color={see} signIn={signInValue} show={show} onClick={() => toggleShow()} onChange={(e) => setPassword(e.target.value)} placeholder='Password' /> 
+                        <Components.InputPass color={see} signIn={signInValue} show={show} onClick={() => toggleShow()} onChange={(e) => setPassword(e.target.value)} placeholder='Password' />
                         <Components.Button onClick={SignUp} signIn={signInValue} ></Components.Button>
                     </Components.Form>
                 </Components.SignUpContainer>
@@ -97,6 +112,7 @@ function SignInSignUp() {
                     </Components.Overlay>
                 </Components.OverlayContainer>
             </Components.Container>
+            <Loading isOpen={loading} />
         </div>
     );
 }

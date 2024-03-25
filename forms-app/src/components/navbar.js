@@ -1,144 +1,137 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import {
-    Navbar,
-    MobileNav,
-    Typography,
-    Button,
-    Menu,
-    MenuHandler,
-    MenuList,
-    MenuItem,
-    Avatar,
-    Card,
-    IconButton,
+  Navbar,
+  Typography,
+  Button,
+  Menu,
+  MenuHandler,
+  MenuList,
+  MenuItem,
 } from "@material-tailwind/react";
 import {
-    CubeTransparentIcon,
-    UserCircleIcon,
-    CodeBracketSquareIcon,
-    Square3Stack3DIcon,
-    ChevronDownIcon,
-    PowerIcon,
-    RocketLaunchIcon,
-    FolderIcon,
-    FolderPlusIcon,
-    Cog8ToothIcon
-
+  UserCircleIcon,
+  PowerIcon,
+  FolderIcon,
+  FolderPlusIcon,
 } from "@heroicons/react/24/solid";
-import {signOutUser} from "../firebase/firebase";
+import { signOutUser } from "../firebase/firebase";
+import { useAuth } from "../contexts/AuthContext";
 
-function ProfileMenu() {
-     const navigate = useNavigate();
-    const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-
-    const LogOut = async () => {
-        try {
-          await signOutUser();
-            navigate("/");
-            console.log("Log Out com sucesso")
-        } catch (error) {
-            console.error("Erro ao fazer log out:", error.message);
-        }
-      };
-
-
-    return (
-        <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-center">
-            <MenuHandler>
-                <Button
-                    variant="text"
-                    color="blue-gray"
-                    className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 lg:ml-auto"
-                >
-                    <UserCircleIcon className="h-6 w-6" />
-                    <ChevronDownIcon
-                        strokeWidth={2.5}
-                        className={`h-3 w-3 transition-transform ${isMenuOpen ? "rotate-180" : ""
-                            }`}
-                    />
-                </Button>
-            </MenuHandler>
-            <MenuList >
-                <PowerIcon onClick={LogOut} style={{ width: '25px', height: '25px', marginTop: "10px"}} />
-            </MenuList>
-        </Menu>
-    );
-}
-
-
-// nav list component
 const navListItems = [
-    {
-        label: "Forms",
-        icon: FolderIcon,
-    },
-    {
-        label: "Create Form",
-        icon: FolderPlusIcon,
-    },
-    {
-        label: "Settings",
-        icon: Cog8ToothIcon,
-    },
+  {
+    label: "Forms",
+    icon: FolderIcon,
+    url: "/home",
+  },
+  {
+    label: "Create Form",
+    icon: FolderPlusIcon,
+    url: "/create-form",
+  },
 ];
 
-function NavList() {
-    return (
-        <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
-            {navListItems.map(({ label, icon }, key) => (
-                <Typography
-                    key={label}
-                    as="a"
-                    href="#"
-                    variant="small"
-                    color="gray"
-                    className="font-medium text-blue-gray-500"
-                >
-                    <MenuItem className="flex items-center gap-2 lg:rounded-full">
-                        {React.createElement(icon, { className: "h-[18px] w-[18px]" })}{" "}
-                        <span className="text-gray-900"> {label}</span>
-                    </MenuItem>
-                </Typography>
-            ))}
-        </ul>
-    );
+function ProfileMenu() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { updateAuthUser } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await signOutUser();
+      updateAuthUser(null);
+      navigate("/");
+    } catch (error) {
+      console.error("Error logging out:", error.message);
+    }
+  };
+
+  return (
+    <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-center">
+      <MenuHandler>
+        <Button
+          variant="text"
+          color="blue-gray"
+          className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 lg:ml-auto"
+        >
+          <UserCircleIcon className="h-6 w-6" />
+        </Button>
+      </MenuHandler>
+      <MenuList>
+        <MenuItem onClick={handleLogout}>
+          <PowerIcon style={{ width: "25px", height: "25px", marginTop: "10px" }} />
+        </MenuItem>
+      </MenuList>
+    </Menu>
+  );
 }
 
-export function ComplexNavbar() {
-    const [isNavOpen, setIsNavOpen] = React.useState(false);
+function ComplexNavbar() {
+  const [isNavOpen, setIsNavOpen] = useState(false);
+  const navigate = useNavigate();
 
-    const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
+  const handleItemClick = (url) => {
+    navigate(url);
+    setIsNavOpen(false);
+  };
 
-    React.useEffect(() => {
-        window.addEventListener(
-            "resize",
-            () => window.innerWidth >= 960 && setIsNavOpen(false),
-        );
-    }, []);
-
-    return (
-        <Navbar className="mx-auto max-w-screen-xl p-2 lg:rounded-full lg:pl-6">
-            <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
-                <div className="hidden lg:block">
-                    <NavList />
-                </div>
-                <IconButton
-                    size="sm"
-                    color="blue-gray"
-                    variant="text"
-                    onClick={toggleIsNavOpen}
-                    className="ml-auto mr-2 lg:hidden"
+  return (
+    <Navbar className="mx-auto max-w-screen-xl p-2 lg:rounded-full lg:pl-6">
+      <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
+        <div className="hidden lg:block">
+          <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
+            {navListItems.map(({ label, icon: Icon, url }, key) => (
+              <Typography
+                key={label}
+                variant="small"
+                color="gray"
+                className="font-medium text-blue-gray-500"
+              >
+                <MenuItem
+                  onClick={() => handleItemClick(url)}
+                  className="flex items-center gap-2 lg:rounded-full"
                 >
-
-                </IconButton>
-                <ProfileMenu />
-            </div>
-            <MobileNav open={isNavOpen} className="overflow-scroll">
-                <NavList />
-            </MobileNav>
-        </Navbar>
-    );
+                  <Icon className="h-[18px] w-[18px]" />
+                  <span className="text-gray-900">{label}</span>
+                </MenuItem>
+              </Typography>
+            ))}
+          </ul>
+        </div>
+        <ProfileMenu />
+      </div>
+      <div className="lg:hidden">
+        <Button
+          size="sm"
+          color="blue-gray"
+          variant="text"
+          onClick={() => setIsNavOpen(!isNavOpen)}
+          className="ml-auto mr-2"
+        >
+          Menu
+        </Button>
+      </div>
+      {isNavOpen && (
+        <div className="lg:hidden">
+          <ul className="flex flex-col gap-2">
+            {navListItems.map(({ label, icon: Icon, url }, key) => (
+              <Typography
+                key={label}
+                variant="small"
+                color="gray"
+                className="font-medium text-blue-gray-500"
+              >
+                <MenuItem onClick={() => handleItemClick(url)}>
+                  <Icon className="h-[18px] w-[18px]" />
+                  <span className="text-gray-900">{label}</span>
+                </MenuItem>
+              </Typography>
+            ))}
+          </ul>
+        </div>
+      )}
+    </Navbar>
+  );
 }
 
 export default ComplexNavbar;

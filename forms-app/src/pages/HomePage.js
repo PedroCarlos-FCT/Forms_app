@@ -1,37 +1,47 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getForms } from '../firebase/firebase';
-import ComplexNavbar from '../components/navbar';
+import Page from '../components/page';
+import Loading from '../components/loading';
+import Table from '../components/table';
+import { useAuth } from '../contexts/AuthContext';
 
 const HomePage = () => {
-  const [forms, setForms] = useState([]);
+  const [forms, setForms] = useState(null);
+  const auth  = useAuth();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchForms = async () => {
+      setLoading(true);
       try {
-        const fetchedForms = await getForms();
+        const fetchedForms = await getForms(auth.authUser.uid);
         console.log('Fetched forms:', fetchedForms);
         setForms(fetchedForms);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching forms:', error);
+        setLoading(false);
       }
     };
 
     fetchForms();
-  }, []); // Run once when the component mounts
+  }, [auth]); // Run once when the component mounts
+
+
 
   return (
-    <div>
-      <h1>Existing Forms</h1>
-      <ul>
-        {forms.map(form => (
-          <li key={form.id}>
-            {form.title} - {form.description}
-          </li>
-        ))}
-      </ul>
-      <Link to="/create-form">Create New Form</Link>
-    </div>
+    <Page>
+      <div>
+      {/* <Link to={`/edit-form?id=${id}`}>Respond to form</Link> */}
+
+        <div style={{padding: "20px 200px"}}>
+        {forms && <Table rows={forms} />} {/* Corrected prop name */}
+        </div>
+        <Link to="/create-form">Create New Form</Link>
+      </div>
+      <Loading isOpen={loading} />
+    </Page>
   );
 };
 

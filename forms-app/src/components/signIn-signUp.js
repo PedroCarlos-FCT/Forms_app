@@ -1,5 +1,5 @@
 import React from 'react';
-import './styles.css'; // Import your CSS file where you define your styles
+import './styles.css'; 
 import { IoMdEye, IoIosEyeOff } from "react-icons/io";
 
 const Container = ({ children }) => (
