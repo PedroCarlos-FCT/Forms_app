@@ -1,0 +1,183 @@
+.container {
+    background-color: transparent;
+    border-radius: 10px;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    position: relative;
+    overflow: hidden;
+    width: 678px;
+    max-width: 100%;
+    min-height: 400px;
+  }
+  
+  .signup-container {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+    left: 0;
+    width: 50%;
+    opacity: 0;
+    z-index: 1;
+  }
+
+  .signin-container{
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+    left: 0;
+    width: 50%;
+    z-index: 2;
+  }
+  
+  
+  .form {
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 50px;
+    height: 100%;
+    text-align: center;
+    padding: 20px 20px;
+
+  }
+  
+  .title {
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    margin: 0;
+    color: #333;
+  }
+  
+  .input {
+    background-color: #eee;
+    border: none;
+    padding: 12px 15px;
+    margin: 8px 0;
+    width: 100%;
+  }
+
+  .eye-btn-signIn{
+    position:sticky;
+    left: 41%;
+    bottom: 37%;
+    font-size: 24px;
+  }
+
+  .eye-btn-signUp{
+    position:sticky;
+    left: 41%;
+    bottom: 29%;
+    font-size: 24px;
+  }
+  
+  .buttonSubmit {
+    border-radius: 20px;
+    border: 1px solid  #a3386c;
+    background-color:  #a3386c;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 12px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 160ms ease-in;
+  }
+  
+  .buttonSubmit:active {
+    transform: scale(0.95);
+  }
+  
+  .buttonSubmit:focus {
+    outline: none;
+  }
+  
+  .ghost-button {
+    border-radius: 20px;
+    border: 1px solid  #ffffff;
+    background-color: transparent;
+    border-color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 12px 45px;
+    letter-spacing: 1px;
+  }
+  
+  .anchor {
+    color: #333;
+    font-size: 14px;
+    text-decoration: none;
+    margin: 15px 0;
+  }
+  
+  .overlay-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    transition: transform 0.8s ease-in-out;
+    z-index: 100;
+  }
+  
+  
+  .overlay {
+    background:  #a3386c;
+    background: -webkit-linear-gradient(to right, purple, #a3386c);
+    background: linear-gradient(to right, purple, #a3386c);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 0 0;
+    color: #ffffff;
+    position: relative;
+    left: -100%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+  }
+  
+  .overlay-panel {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 40px;
+    text-align: center;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+  }
+  
+  .overlay-panel.left {
+    transform: translateX(-20%);
+    padding: 20px 20px;
+
+  }
+  
+  
+  .overlay-panel.right {
+    right: 0;
+    transform: translateX(0);
+    padding: 20px 20px;
+
+  }
+  
+  .paragraph {
+    font-size: 14px;
+    font-weight: 100;
+    line-height: 20px;
+    letter-spacing: 0.5px;
+    margin: 20px 0 30px;
+  }
+  
+
+
+/* NAVBAR */
