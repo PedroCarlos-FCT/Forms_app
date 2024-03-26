@@ -3,7 +3,6 @@
 import { initializeApp } from "firebase/app";
 import { collection, getDocs, addDoc, doc, updateDoc, getFirestore, query, where, arrayUnion, getDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, getAuth } from "firebase/auth";
-import { toast } from "react-hot-toast";
 
 
 const firebaseConfig = {
@@ -116,5 +115,5 @@ const getResponses = async (formId) => await getCollection('responses', formId);
 const setResponse = async (data, formId) => await setDocument('responses', data, formId);
 const updateResponse = async (id, data) => await updateDocument('responses', id, data);
 
-export { signUp, signIn, signOutUser, getForms, setForm,getForm, updateForm, getQuestions, setQuestion, updateQuestion, getResponses, setResponse, updateResponse };
+export { signUp, signIn, signOutUser, getForms, setForm, getForm, updateForm, getQuestions, setQuestion, updateQuestion, getResponses, setResponse, updateResponse };
 
