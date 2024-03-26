@@ -50,8 +50,10 @@ async function signUp(email, password, username) {
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         // Create a new document in the 'users' collection
-        await setDocument("users", { email, username }); // Assuming 'username' holds the username
+        console.log("Email  ", email, "Password  ", password, "Username  ", username);
+            // await setDocument("users", { email, username }); // Assuming 'username' holds the username
         return userCredential.user;
+
 
     } catch (error) {
         throw error;

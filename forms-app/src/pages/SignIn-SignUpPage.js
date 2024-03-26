@@ -41,6 +41,7 @@ function SignInSignUp() {
         }
         setLoading(true);
         try {
+            console.log("Email  ", email, "Password  ", password, "Username  ", username);
             const user = await signUp(email, password, username);
             updateAuthUser(user);
             setLoading(false);
