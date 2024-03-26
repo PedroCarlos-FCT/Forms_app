@@ -8,7 +8,7 @@ import { useAuth } from '../contexts/AuthContext';
 import Button from 'react-bootstrap/Button';
 
 const HomePage = () => {
-  const [forms, setForms] = useState(null);
+  const [forms, setForms] = useState([]);
   const auth = useAuth();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ const HomePage = () => {
           Create New Form
         </Button>
         <div style={{ padding: "20px" }}>
-          {forms && <Table rows={forms} />} {/* Corrected prop name */}
+          {forms.lenght !== 0 && <Table rows={forms} />} {/* Corrected prop name */}
         </div>
       </div>
       <Loading isOpen={loading} />
