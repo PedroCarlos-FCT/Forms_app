@@ -17,7 +17,7 @@ const CreateFormPage = () => {
     setLoading(true);
     e.preventDefault();
     if (!title || !description) {
-      toast.error('Por favor, preencha todos os campos');
+      toast.error('Please fill all fields');
       console.error('Preencher campos');
       setLoading(false);
       return;
@@ -25,7 +25,7 @@ const CreateFormPage = () => {
     try {
       const id = await setForm({ title, description }, auth.authUser.uid);
       console.log('Form created with id:', id);
-      toast.success('Formulário criado com sucesso');
+      toast.success('Form created successfully');
       navigate(`/edit-form?id=${id}`);
 
 
@@ -44,7 +44,7 @@ const CreateFormPage = () => {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-lg mb-1">Name:</label>
-          <input
+          <input style={{maxWidth: "700px"}}
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -53,7 +53,7 @@ const CreateFormPage = () => {
         </div>
         <div>
           <label className="block text-lg mb-1">Description:</label>
-          <textarea
+          <textarea style={{maxWidth: "700px"}}
             type="text"
             value={description}
             onChange={(e) => setDescription(e.target.value)}

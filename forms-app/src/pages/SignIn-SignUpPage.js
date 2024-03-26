@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import * as Components from "../components/signIn-signUp";
 import { signUp, signIn } from "../firebase/firebase";
-import { Toaster } from "react-hot-toast";
-import { useNavigate } from "react-router-dom"; // Import useHistory
+import toast, { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import Loading from "../components/loading";
-
-
 
 
 function SignInSignUp() {
@@ -18,7 +16,7 @@ function SignInSignUp() {
     const [see, setSee] = useState(true);
     const [loading, setLoading] = useState(false);
     const { updateAuthUser } = useAuth();
-    const navigate = useNavigate(); // Use navigate
+    const navigate = useNavigate();
 
     const toggleShow = () => {
         setShow(!show);
@@ -36,41 +34,63 @@ function SignInSignUp() {
     };
 
     const SignUp = async () => {
+        if (!email || !password || !username) {
+            toast.error('Please fill all fields');
+            console.error("Preencher campos");
+            return;
+        }
         setLoading(true);
         try {
             const user = await signUp(email, password, username);
             updateAuthUser(user);
             setLoading(false);
-            navigate("/home"); // Navigate to the home page
+            toast.success("Account created successfully!")
+            navigate("/home");
 
         } catch (error) {
+            if (error.code === "auth/email-already-in-use") {
+                toast.error('Email already in use');
+            } else if (error.code === "auth/weak-password") {
+                toast.error('Password must have at least 6 characters');
+            } else if (error.code === "auth/invalid-email") {
+                toast.error('Invalid email');
+            } else
+                toast.error('Error creating account');
             console.error("Erro ao criar conta:", error.message);
             setLoading(false);
         }
     };
 
     const LogIn = async () => {
+        if (!email || !password) {
+            toast.error('Please fill all fields');
+            console.error("Preencher campos");
+            return;
+        }
         setLoading(true);
+
         try {
             const user = await signIn(email, password);
             updateAuthUser(user);
             setLoading(false);
-            navigate("/home"); // Navigate to the home page
+            navigate("/home");
+            toast.success('Logged in successfully!');
         } catch (error) {
+            toast.error('Wrong email or password');
             console.error("Erro ao fazer login:", error.message);
             setLoading(false);
         }
     };
 
     return (
-        <div style={{ background: "transparent", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", height: "100vh", margin: "-20px 0 50px" }}>
-            <Toaster></Toaster>
+        <div style={{ background: "#FCF7E7", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", height: "100vh" }}>
+            <Toaster />
 
             <Components.Container>
                 <Components.SignUpContainer signIn={signInValue}>
                     <Components.Form >
-                        <Components.Title>Crie uma conta</Components.Title>
-                        <Components.Input type='text' placeholder='Nome' onChange={(e) => setName(e.target.value)} />
+                        <Components.Title>Create account</Components.Title>
+                        <Components.Input type='text' placeholder='Name' onChange={(e) => setName(e.target.value)} />
                         <Components.Input type='email' placeholder='Email' onChange={(e) => setEmail(e.target.value)} />
                         <Components.InputPass color={see} signIn={signInValue} show={show} onClick={() => toggleShow()} onChange={(e) => setPassword(e.target.value)} placeholder='Password' />
                         <Components.Button onClick={SignUp} signIn={signInValue} ></Components.Button>
@@ -79,8 +99,8 @@ function SignInSignUp() {
 
                 <Components.SignInContainer signIn={signInValue}>
                     <Components.Form>
-                        <Components.Title>Iniciar sessão</Components.Title>
-                        <Components.Input type='text' placeholder='Nome de utilizador' onChange={(e) => setEmail(e.target.value)} />
+                        <Components.Title>Login</Components.Title>
+                        <Components.Input type='text' placeholder='User Email' onChange={(e) => setEmail(e.target.value)} />
                         <Components.InputPass color={see} signIn={signInValue} show={show} onClick={() => toggleShow()} onChange={(e) => setPassword(e.target.value)} placeholder='Password' />
                         <Components.Button onClick={LogIn} signIn={signInValue} ></Components.Button>
                     </Components.Form>
@@ -90,9 +110,9 @@ function SignInSignUp() {
                     <Components.Overlay signIn={signInValue}>
 
                         <Components.LeftOverlayPanel signIn={signInValue}>
-                            <Components.Title color="white">Bem-Vindo de volta!</Components.Title>
+                            <Components.Title color="white">Welcome Back!</Components.Title>
                             <Components.Paragraph>
-                                Para fazer login clique no botão abaixo!
+                                Press the button to login
                             </Components.Paragraph>
                             <Components.GhostButton onClick={() => { toggleSignIn(); toggleSee() }}>
                                 Login
@@ -100,12 +120,12 @@ function SignInSignUp() {
                         </Components.LeftOverlayPanel>
 
                         <Components.RightOverlayPanel signIn={signInValue}>
-                            <Components.Title color="white">Bem-Vindo!</Components.Title>
+                            <Components.Title color="white">Welcome!</Components.Title>
                             <Components.Paragraph>
-                                Preencha o formulário e comece já a analisar a sua cozinha
+                                Create an account to start using our services
                             </Components.Paragraph>
                             <Components.GhostButton onClick={() => { toggleSignIn(); toggleSee() }}>
-                                Aderir
+                                Join
                             </Components.GhostButton>
                         </Components.RightOverlayPanel>
 

@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { getForms } from '../firebase/firebase';
 import Page from '../components/page';
 import Loading from '../components/loading';
 import Table from '../components/table';
 import { useAuth } from '../contexts/AuthContext';
+import Button from 'react-bootstrap/Button';
 
 const HomePage = () => {
   const [forms, setForms] = useState(null);
-  const auth  = useAuth();
+  const auth = useAuth();
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchForms = async () => {
@@ -28,17 +30,21 @@ const HomePage = () => {
     fetchForms();
   }, [auth]); // Run once when the component mounts
 
+  const handleRedirect = () => {
+    navigate('/create-form');
+  }
+
 
 
   return (
     <Page>
       <div>
-      {/* <Link to={`/edit-form?id=${id}`}>Respond to form</Link> */}
-
-        <div style={{padding: "20px 200px"}}>
-        {forms && <Table rows={forms} />} {/* Corrected prop name */}
+        <Button variant="primary" onClick={handleRedirect}>
+          Create New Form
+        </Button>
+        <div style={{ padding: "20px" }}>
+          {forms && <Table rows={forms} />} {/* Corrected prop name */}
         </div>
-        <Link to="/create-form">Create New Form</Link>
       </div>
       <Loading isOpen={loading} />
     </Page>

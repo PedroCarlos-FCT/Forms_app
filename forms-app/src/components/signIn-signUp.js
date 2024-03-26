@@ -38,7 +38,7 @@ const InputPass = ({ placeholder, show, onClick, signIn, color, onChange}) => <>
 </>;
 
 const Button = ({ signIn, onClick=null}) => (
-    <button className="buttonSubmit" onClick={onClick}>{signIn?"Login" : "Aderir"}</button>
+    <button className="buttonSubmit" onClick={onClick}>{signIn?"Login" : "Join"}</button>
 );
 
 const GhostButton = ({ children, onClick }) => (

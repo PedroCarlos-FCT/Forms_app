@@ -76,8 +76,8 @@
   
   .buttonSubmit {
     border-radius: 20px;
-    border: 1px solid  #a3386c;
-    background-color:  #a3386c;
+    border: 1px solid  #D291BC;
+    background-color:  #D291BC;
     color: #ffffff;
     font-size: 12px;
     font-weight: bold;
@@ -126,9 +126,9 @@
   
   
   .overlay {
-    background:  #a3386c;
-    background: -webkit-linear-gradient(to right, purple, #a3386c);
-    background: linear-gradient(to right, purple, #a3386c);
+    background:  #D291BC;
+    background: -webkit-linear-gradient(to right, #957DAD, #D291BC);
+    background: linear-gradient(to right, #957DAD, #D291BC);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 0 0;

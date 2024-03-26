@@ -8,6 +8,7 @@ import { Card } from '@material-tailwind/react';
 import toast from 'react-hot-toast';
 import Table from '../components/table';
 import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/Form';
 
 
 const RespondToQuestionsPage = () => {
@@ -70,10 +71,10 @@ const RespondToQuestionsPage = () => {
             const responseIds = [];
             for (const questionId in responses) {
                 const response = responses[questionId];
-                const question = questions.find(q => q.id === questionId); // Find the question corresponding to the questionId
+                const question = questions.find(q => q.id === questionId);
                 const responseData = {
                     questionId,
-                    question_title: question.title, // Include the question title in the response data
+                    question_title: question.title,
                     response,
                 };
                 const responseId = await setResponse(responseData, id);
@@ -82,10 +83,9 @@ const RespondToQuestionsPage = () => {
             setLoading(false);
             setShowModal(false);
             setChange(!change);
+
             toast.success('Responses submitted successfully');
             console.log('Responses submitted successfully:', responseIds);
-            // Optionally, you can reset responses state if needed
-            //setResponses({});
         } catch (error) {
             console.error('Error submitting responses:', error);
             toast.error('Error submitting responses');
@@ -103,6 +103,8 @@ const RespondToQuestionsPage = () => {
 
     const handleCloseModal = () => {
         setShowModal(false);
+        setResponses({});
+
     };
 
     return (
@@ -110,7 +112,7 @@ const RespondToQuestionsPage = () => {
 
         <Page>
             <div>
-                {questions.length !== 0 && !loading && <h1>Respond to Questions</h1>}
+                {questions.length !== 0 && !loading && <h1>Respond to Form Questions</h1>}
                 {questions.length === 0 && !loading &&
                     <><h1>Form has no questions. Create new questions.</h1><Button onClick={() => handleEdit(id)}>
                         Edit Form
@@ -121,11 +123,11 @@ const RespondToQuestionsPage = () => {
                 </div>}
             </div>
             <div>
-                <Button variant="primary" onClick={handleOpenModal}>
+                {questions.length !== 0 && <Button variant="primary" onClick={handleOpenModal}>
                     Respond
-                </Button>
+                </Button>}
                 <div style={{ padding: "20px 200px" }}>
-                    {fetchedResponses && <Table rows={fetchedResponses} columns={columnsNames} editable={false} respondable={false}/>}
+                    {fetchedResponses.length !== 0 && <Table rows={fetchedResponses} columns={columnsNames} editable={false} respondable={false} />}
 
                     <Modal show={showModal} onHide={handleCloseModal}>
                         <Modal.Header closeButton>
@@ -138,22 +140,18 @@ const RespondToQuestionsPage = () => {
                                         <h3>{question.title}</h3>
                                         <p>{question.description}</p>
                                         {question.type === '0' && (
-                                            <input
-                                                type="text"
-                                                value={responses[question.id] || ''}
-                                                onChange={e => handleResponseChange(question.id, e.target.value)}
-                                            />
+                                            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                                                <Form.Control as="textarea" placeholder="Answer" value={responses[question.id] || ''} onChange={e => handleResponseChange(question.id, e.target.value)} />
+                                            </Form.Group>
                                         )}
                                         {(question.type === '1' || question.type === '2') && (
-                                            <select
-                                                value={responses[question.id] || ''}
-                                                onChange={e => handleResponseChange(question.id, e.target.value)}
-                                            >
-                                                <option value="">Select an option</option>
+                                            <Form.Select aria-label="Select and answer option" value={responses[question.id] || ''}
+                                                onChange={e => handleResponseChange(question.id, e.target.value)}>
+                                                <option>Select an option</option>
                                                 {question.options.map(option => (
                                                     <option key={option} value={option}>{option}</option>
                                                 ))}
-                                            </select>
+                                            </Form.Select>
                                         )}
                                     </div>
                                 </Card>

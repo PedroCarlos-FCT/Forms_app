@@ -5,14 +5,29 @@ const columnsHome = ["Title", "Description", "Last update on", "", ""];
 
 const Table = ({ rows, columns = columnsHome, editable = true, respondable = true }) => {
   const navigate = useNavigate();
-  
+
   const handleEdit = (id) => {
     navigate(`/edit-form?id=${id}`);
   };
-  
+
   const handleRespond = (id) => {
     navigate(`/respond-form?id=${id}`);
   };
+
+  function handleView(column, row) {
+    const col = column.toLowerCase().replace(/\s+/g, '_')
+    console.log(row);
+    if (col === "options") {
+      if (row.type !== undefined) {
+        if(row.type === "0"){
+          return "Not a multiple choice question.";
+        }
+      }
+      return row[col] === "" ? "No options to display." : row[col].join(", ");
+    } else {
+      return row[col] === "" ? "No description." : row[col];
+    }
+  }
 
   return (
     <Card className="h-full w-full overflow-hidden">
@@ -41,7 +56,7 @@ const Table = ({ rows, columns = columnsHome, editable = true, respondable = tru
                 {columns.map((column, columnIndex) => (
                   <td key={columnIndex} className="p-4">
                     <Typography variant="small" color="blue-gray" className="font-normal">
-                    {column.toLowerCase().replace(/\s+/g, '_') === "options" ? row.options.join(", ") : row[column.toLowerCase().replace(/\s+/g, '_')]}
+                      {handleView(column, row)}
                     </Typography>
                   </td>
                 ))}

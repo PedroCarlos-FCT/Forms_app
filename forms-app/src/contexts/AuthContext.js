@@ -1,15 +1,12 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
-// Create the AuthContext
 const AuthContext = createContext();
 
-// Create a custom hook to use the AuthContext
 export const useAuth = () => {
     return useContext(AuthContext);
 }
 
-// Create the AuthProvider component
 export const AuthProvider = ({ children }) => {
     const [authUser, setAuthUser] = useState(() => {
         const storedUser = localStorage.getItem('authUser');
@@ -39,7 +36,6 @@ export const AuthProvider = ({ children }) => {
         return () => unsubscribe();
     }, [auth]);
 
-    // Function to set authenticated user
     const updateAuthUser = (user) => {
         setAuthUser(user);
         if (user) {
