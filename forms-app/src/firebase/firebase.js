@@ -6,12 +6,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, ge
 
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBysw2tJeqJFkbZ-B0K6VF4gonEHufryyE",
-    authDomain: "forms-app-ee9a6.firebaseapp.com",
-    projectId: "forms-app-ee9a6",
-    storageBucket: "forms-app-ee9a6.appspot.com",
-    messagingSenderId: "631578205904",
-    appId: "1:631578205904:web:cf2e7b9c08faf5b457c8d5"
+//configs...
 };
 
 const app = initializeApp(firebaseConfig);
